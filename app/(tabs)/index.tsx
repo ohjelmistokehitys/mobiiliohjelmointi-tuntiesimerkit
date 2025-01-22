@@ -2,8 +2,8 @@ import { Button, Text, TextInput, TextProps, View } from "react-native";
 import styles from "../../components/ui/styles";
 import { useState } from "react";
 
-const Title = ({ children }: TextProps) => <Text style={styles.title}>{children}</Text>
-const Message = ({ children }: TextProps) => <Text style={styles.text}>{children}</Text>
+export const Title = ({ children }: TextProps) => <Text style={styles.title}>{children}</Text>
+export const Message = ({ children }: TextProps) => <Text style={styles.text}>{children}</Text>
 
 export default function Calculator() {
 
