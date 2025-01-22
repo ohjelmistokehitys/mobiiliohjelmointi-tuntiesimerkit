@@ -6,12 +6,11 @@ import { Title, Message } from './index';
 const MIN_GUESS = 1, MAX_GUESS = 100;
 
 export default function Guesser() {
-    let [correct, setCorrect] = useState(0);
-    let attempts = useRef(0);
-    let [message, setMessage] = useState("");
-    let [input, setInput] = useState("");
+    const [correct, setCorrect] = useState(0);
+    const attempts = useRef(0);
+    const [message, setMessage] = useState("");
+    const [input, setInput] = useState("");
 
-    console.log({ correct, attempts, message, input });
     useEffect(() => newGame(), []);
 
     const newGame = () => {

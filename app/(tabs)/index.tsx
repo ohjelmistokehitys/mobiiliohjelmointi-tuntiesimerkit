@@ -7,13 +7,13 @@ export const Message = ({ children }: TextProps) => <Text style={styles.text}>{c
 
 export default function Calculator() {
 
-    let [numA, setNumA] = useState("");
-    let [numB, setNumB] = useState("");
-    let [message, setMessage] = useState("");
+    const [numA, setNumA] = useState("");
+    const [numB, setNumB] = useState("");
+    const [message, setMessage] = useState("");
 
     const calc = (operator: "+" | "-") => {
-        let a = +numA;
-        let b = +numB;
+        const a = +numA;
+        const b = +numB;
 
         if (Number.isNaN(a) || Number.isNaN(b)) {
             setMessage("Input only numbers");

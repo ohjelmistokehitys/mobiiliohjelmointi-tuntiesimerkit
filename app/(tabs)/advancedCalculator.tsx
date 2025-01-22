@@ -28,12 +28,12 @@ function NumberInput({ value, onChange, placeholder }: NumberInputProps) {
 
 export default function Calculator() {
 
-    let [numA, setNumA] = useState(0);
-    let [numB, setNumB] = useState(0);
-    let [message, setMessage] = useState("");
+    const [numA, setNumA] = useState(0);
+    const [numB, setNumB] = useState(0);
+    const [message, setMessage] = useState("");
 
     const calc = (operator: "+" | "-") => {
-        let result = operator === "+" ? (numA + numB) : (numA - numB);
+        const result = operator === "+" ? (numA + numB) : (numA - numB);
         setMessage(`${numA} ${operator} ${numB} = ${result}`);
     }
 
