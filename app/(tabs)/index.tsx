@@ -1,38 +1,53 @@
-import { useState } from 'react';
-import { Text, View, Button, TextInput, StyleSheet } from 'react-native';
+import { Button, Text, TextInput, TextProps, View } from "react-native";
+import styles from "../../components/ui/styles";
+import { useState } from "react";
 
+const Title = ({ children }: TextProps) => <Text style={styles.title}>{children}</Text>
+const Message = ({ children }: TextProps) => <Text style={styles.text}>{children}</Text>
 
-export default function IndexScreen() {
-  const [name, setName] = useState("");
+export default function Calculator() {
 
-  return <View style={styles.container}>
-    <Text style={styles.text}>Hello {name}</Text>
-    <TextInput
-      value={name}
-      onChangeText={setName}
-      style={styles.textInput}
-      placeholder='Please input your name' />
-    <Button title='Ok!' />
-  </View>;
+    let [numA, setNumA] = useState("");
+    let [numB, setNumB] = useState("");
+    let [message, setMessage] = useState("");
+
+    const calc = (operator: "+" | "-") => {
+        let a = +numA;
+        let b = +numB;
+
+        if (Number.isNaN(a) || Number.isNaN(b)) {
+            setMessage("Input only numbers");
+            return;
+        }
+
+        if (operator === "+") {
+            setMessage(`${a} + ${b} = ${a + b}`);
+        } else {
+            setMessage(`${a} - ${b} = ${a - b}`);
+        }
+    }
+
+    return <View style={styles.container}>
+        <Title>Calculator 🧮</Title>
+
+        <TextInput style={styles.textInput}
+            value={numA}
+            onChangeText={text => setNumA(text)}
+            placeholder="first number"
+            placeholderTextColor={styles.textInput.color}
+            keyboardType="numeric" />
+
+        <TextInput style={styles.textInput}
+            value={numB}
+            onChangeText={text => setNumB(text)}
+            placeholder="second number"
+            placeholderTextColor={styles.textInput.color}
+            keyboardType="numeric" />
+
+        <View style={styles.buttonContainer}>
+            <Button title="+" onPress={() => calc("+")} />
+            <Button title="-" onPress={() => calc("-")} />
+        </View>
+        <Message>{message}</Message>
+    </View>;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 30
-  },
-  textInput: {
-    color: "white",
-    width: 150,
-    height: 40,
-    borderColor: "white",
-    borderWidth: 2
-  },
-  text: {
-    color: "white",
-    fontSize: 50
-  }
-});
