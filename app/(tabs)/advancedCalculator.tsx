@@ -1,6 +1,7 @@
-import { Button, Text, TextInput, TextInputProps, TextProps, View } from "react-native";
-import styles from "../../components/ui/styles";
+import { Button, Text, TextProps, View } from "react-native";
 import { useState } from "react";
+import styles from "../../components/ui/styles";
+import NumberInput from "@/components/NumberInput";
 
 // These two custom components act as examples on how you could "wrap" built-in
 // components and make your own, reusable and semantically more meaningful ones.
@@ -8,25 +9,11 @@ const Title = ({ children }: TextProps) => <Text style={styles.title}>{children}
 const Message = ({ children }: TextProps) => <Text style={styles.text}>{children}</Text>
 
 
-// Feel free to modify these properties in the extra task:
-type NumberInputProps = {
-    value: number
-    onChange: (x: number) => void
-    placeholder?: string
-}
+// For the extra task, see the file /components/NumberInput
+// that contains the NumberInput component that is utilized below:
 
-/**
- * Extra task:
- * Complete the following reusable `NumberInput` component that only accepts and sets
- * values of numeric types. You should utilize the existing TextInput component and
- * add your own logic for validating and converting inputs to numbers. Remember to
- * add the keyboardType, style and other useful properties in the TextInput, too.
- */
-function NumberInput({ value, onChange, placeholder }: NumberInputProps) {
-    return <Message>TODO!</Message>
-}
 
-export default function Calculator() {
+export default function AdvancedCalculator() {
 
     const [numA, setNumA] = useState(0);
     const [numB, setNumB] = useState(0);

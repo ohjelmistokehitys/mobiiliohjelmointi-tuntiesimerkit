@@ -13,6 +13,7 @@ export default StyleSheet.create({
         color: "white",
         width: 150,
         height: 40,
+        paddingHorizontal: 8,
         borderColor: "white",
         borderWidth: 2
     },
@@ -27,5 +28,11 @@ export default StyleSheet.create({
     buttonContainer: {
         flexDirection: "row",
         gap: 20
+    },
+    inputValid: {
+
+    },
+    inputError: {
+        borderColor: 'red'
     }
 });
