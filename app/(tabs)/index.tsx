@@ -5,8 +5,8 @@ import NumberInput from "@/components/NumberInput";
 
 // These two custom components act as examples on how you could "wrap" built-in
 // components and make your own, reusable and semantically more meaningful ones.
-const Title = ({ children }: TextProps) => <Text style={styles.title}>{children}</Text>
-const StyledText = ({ children }: TextProps) => <Text style={styles.text}>{children}</Text>
+export const Title = ({ children }: TextProps) => <Text style={styles.title}>{children}</Text>
+export const StyledText = ({ children }: TextProps) => <Text style={styles.text}>{children}</Text>
 
 
 export default function CalculatorWithHistory() {
