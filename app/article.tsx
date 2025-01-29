@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { news } from "../news";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { styles } from "./styles";
+import { styles } from "../styles";
 
 
 /**

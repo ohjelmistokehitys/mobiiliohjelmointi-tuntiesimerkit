@@ -1,7 +1,7 @@
 import { FlatList, Text, View } from "react-native";
 import { news } from "../news";
 import { Link } from "expo-router";
-import { styles, listStyles } from "./styles";
+import { styles, listStyles } from "../styles";
 
 type ArticleProps = {
   article: {
