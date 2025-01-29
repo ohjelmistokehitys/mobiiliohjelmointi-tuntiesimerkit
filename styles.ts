@@ -9,18 +9,18 @@ export const styles = StyleSheet.create({
         gap: 20
     },
     title: {
-        alignSelf: "center",
+        alignSelf: "flex-start",
         fontSize: 25,
     },
+    bodyText: {
+        alignSelf: "flex-start"
+    }
 });
 
 export const listStyles = StyleSheet.create({
     articleTitle: {
         fontWeight: "bold",
         fontSize: 16
-    },
-    articleLink: {
-        textDecorationLine: "underline"
     },
     separator: {
         marginVertical: 15,

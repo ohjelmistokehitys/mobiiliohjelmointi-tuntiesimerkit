@@ -24,7 +24,7 @@ export default function Article() {
 
       <View style={styles.container}>
         <Text style={styles.title}>{article.title}</Text>
-        <Text>{article.body}</Text>
+        <Text style={styles.bodyText}>{article.body}</Text>
       </View>
     </>
   );

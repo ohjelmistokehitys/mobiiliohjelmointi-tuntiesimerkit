@@ -21,8 +21,7 @@ function ArticleInList({ article }: ArticleProps) {
       {
         pathname: "./article",
         params: { id: article.id }
-      }}
-      style={listStyles.articleLink}>
+      }}>
       <View style={{ gap: 10 }}>
         <Text style={listStyles.articleTitle}>{article.title}</Text>
         <Text>{article.lead}</Text>
