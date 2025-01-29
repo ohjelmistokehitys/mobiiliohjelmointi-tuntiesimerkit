@@ -5,6 +5,7 @@ type ArticleProps = {
   article: {
     title: string,
     lead: string | null,
+    body: string,
     id: string
   }
 };
