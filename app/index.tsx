@@ -1,5 +1,7 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { news } from "../news";
+import { Link } from "expo-router";
+import { styles, listStyles } from "./styles";
 
 type ArticleProps = {
   article: {
@@ -10,15 +12,29 @@ type ArticleProps = {
   }
 };
 
-function Article({ article }: ArticleProps) {
-  return <View>
-    <Text style={styles.articleTitle}>{article.title}</Text>
-    <Text>{article.lead}</Text>
-  </View>;
+/**
+ * This component is used for rendering a single article in the article list.
+ */
+function ArticleInList({ article }: ArticleProps) {
+  return (
+    <Link href={
+      {
+        pathname: "./article",
+        params: { id: article.id }
+      }}
+      style={listStyles.articleLink}>
+      <View style={{ gap: 10 }}>
+        <Text style={listStyles.articleTitle}>{article.title}</Text>
+        <Text>{article.lead}</Text>
+      </View>
+    </Link>
+  );
 }
 
+
 export default function Index() {
-  const separator = () => <View style={styles.separator} />
+  const separator = () => <View style={listStyles.separator} />
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Uutiset ({news.length} kpl)</Text>
@@ -26,31 +42,8 @@ export default function Index() {
       <FlatList
         data={news}
         ItemSeparatorComponent={separator}
-        renderItem={({ item, index }) => <Article article={item} />
+        renderItem={({ item, index }) => <ArticleInList article={item} />
         } />
     </View>
   );
 }
-
-let styles = StyleSheet.create({
-  articleTitle: {
-    fontWeight: "bold",
-    fontSize: 16
-  },
-  title: {
-    alignSelf: "center",
-    fontSize: 25,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    margin: 20,
-    gap: 20
-  },
-  separator: {
-    marginVertical: 15,
-    borderColor: "gray",
-    borderBottomWidth: 1
-  }
-});
