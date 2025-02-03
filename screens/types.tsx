@@ -9,18 +9,14 @@ declare global {
     namespace ReactNavigation {
         interface RootParamList {
             Calculator: undefined;
-            History: {
-                calculations: string[];
-            };
+            History: undefined;
         }
     }
 }
 
 export type RootParamList = {
     Calculator: undefined;
-    History: {
-        calculations: string[]
-    };
+    History: undefined;
 }
 
 export type CalculatorType = BottomTabScreenProps<RootParamList, 'Calculator'>

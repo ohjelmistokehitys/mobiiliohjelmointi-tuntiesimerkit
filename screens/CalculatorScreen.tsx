@@ -4,7 +4,7 @@ import styles from "../components/styles";
 import NumberInput from "../components/NumberInput";
 import { useNavigation } from "@react-navigation/native";
 import { StyledText, Title } from "../components/Text";
-
+import { useHistory } from "../hooks/HistoryContext";
 
 
 export default function CalculatorScreen() {
@@ -13,12 +13,13 @@ export default function CalculatorScreen() {
 
     const [numA, setNumA] = useState(0);
     const [numB, setNumB] = useState(0);
-    const [calculations, setCalculations] = useState<string[]>([]);
+
+    const { addHistory, history } = useHistory();
 
     const calc = (operator: "+" | "-") => {
         const result = operator === "+" ? (numA + numB) : (numA - numB);
         const calculation = `${numA} ${operator} ${numB} = ${result}`
-        setCalculations(calculations.concat(calculation));
+        addHistory(calculation);
     }
 
     return <View style={styles.container}>
@@ -32,10 +33,10 @@ export default function CalculatorScreen() {
             <Button title="-" onPress={() => calc("-")} />
         </View>
         <View style={styles.buttonContainer}>
-            <Button title="See history" onPress={() => navigation.navigate("History", { calculations })} />
+            <Button title="See history" onPress={() => navigation.navigate("History")} />
         </View>
         <FlatList
-            data={calculations.toReversed()} // `toReversed` makes the most recent one appear on top
+            data={history.toReversed()} // `toReversed` makes the most recent one appear on top
             ListEmptyComponent={<StyledText>Let's do math!</StyledText>}
             renderItem={({ item }) => <StyledText>{item}</StyledText>}
         />

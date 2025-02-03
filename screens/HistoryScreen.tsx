@@ -1,20 +1,17 @@
 import { FlatList, View } from "react-native";
 import styles from "../components/styles";
-import { useRoute } from "@react-navigation/native";
-import { HistoryType } from "./types";
 import { StyledText, Title } from "../components/Text";
+import { useHistory } from "../hooks/HistoryContext";
 
 export default function HistoryScreen() {
 
-    const route = useRoute<HistoryType['route']>();
-    const { calculations = [] } = route.params;
+    const { history } = useHistory();
 
-    console.log(calculations);
     return <View style={styles.container}>
         <Title>History 🦖</Title>
 
         <FlatList
-            data={calculations}
+            data={history}
             renderItem={({ item }) => <StyledText>{item}</StyledText>}
         />
     </View>;
