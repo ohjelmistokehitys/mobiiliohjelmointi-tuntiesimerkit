@@ -1,48 +1,45 @@
-import { FlatList, Text, View } from "react-native";
-import { news } from "../news";
-import { Link } from "expo-router";
-import { styles, listStyles } from "../styles";
+import { styles } from "@/styles";
+import { useEffect, useState } from "react";
+import { Button, FlatList, Text, View } from "react-native";
+import React from 'react';
+import { GitHubRepo } from "./types";
 
-type ArticleProps = {
-  article: {
-    title: string,
-    lead: string | null,
-    body: string,
-    id: string
-  }
-};
+async function searchRepositories(keyword: string): Promise<GitHubRepo[]> {
+    const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(keyword)}&per_page=100`;
 
-/**
- * This component is used for rendering a single article in the article list.
- */
-function ArticleInList({ article }: ArticleProps) {
-  return (
-    <Link href={
-      {
-        pathname: "./article",
-        params: { id: article.id }
-      }}>
-      <View style={{ gap: 10 }}>
-        <Text style={listStyles.articleTitle}>{article.title}</Text>
-        <Text>{article.lead}</Text>
-      </View>
-    </Link>
-  );
+    let response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(response.status.toString());
+    }
+
+    let json = await response.json();
+    return json.items;
 }
 
 
-export default function Index() {
-  const separator = () => <View style={listStyles.separator} />
+export default function GitRepositorySearch() {
+    const [repositories, setRepositories] = useState<GitHubRepo[]>([]);
+    const [keyword, setKeyword] = useState("react");
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Uutiset ({news.length} kpl)</Text>
+    const doSearch = () => {
+        searchRepositories(keyword)
+            .then(repos => {
+                setRepositories(repos);
+                console.log(repos);
+            });
+    };
 
-      <FlatList
-        data={news}
-        ItemSeparatorComponent={separator}
-        renderItem={({ item, index }) => <ArticleInList article={item} />
-        } />
-    </View>
-  );
+    return <View style={styles.container}>
+        <Text style={styles.title}>GitHub search</Text>
+        <Text style={styles.bodyText}>Search for repositories</Text>
+        <Button title="Search" onPress={doSearch} />
+        <FlatList
+            data={repositories}
+            renderItem={({ item }) => <View style={{ paddingBottom: 20 }}>
+                <Text style={styles.bodyText}>{item.full_name}</Text>
+                <Text style={styles.bodyText}>{item.owner?.login}</Text>
+            </View>}
+        />
+    </View>;
 }
