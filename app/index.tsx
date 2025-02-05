@@ -1,7 +1,7 @@
-import { FlatList, Text, View } from "react-native";
-import { news } from "../news";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { Link } from "expo-router";
 import { styles, listStyles } from "../styles";
+import { useArticles } from "@/hooks/ArticleContext";
 
 type ArticleProps = {
   article: {
@@ -32,17 +32,23 @@ function ArticleInList({ article }: ArticleProps) {
 
 
 export default function Index() {
+  const { articles, loading } = useArticles();
+
   const separator = () => <View style={listStyles.separator} />
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Uutiset ({news.length} kpl)</Text>
+      <Text style={styles.title}>Uutiset ({articles.length} kpl)</Text>
 
-      <FlatList
-        data={news}
-        ItemSeparatorComponent={separator}
-        renderItem={({ item, index }) => <ArticleInList article={item} />
-        } />
+      {loading ?
+        <ActivityIndicator size="large" style={{ alignSelf: "center" }} />
+        :
+        <FlatList
+          data={articles}
+          ItemSeparatorComponent={separator}
+          renderItem={({ item, index }) => <ArticleInList article={item} />
+          } />
+      }
     </View>
   );
 }

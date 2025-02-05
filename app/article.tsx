@@ -1,8 +1,8 @@
 import { Text, View } from "react-native";
-import { news } from "../news";
 import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { styles } from "../styles";
+import { useArticles } from "@/hooks/ArticleContext";
 
 
 /**
@@ -11,7 +11,10 @@ import { styles } from "../styles";
  */
 export default function Article() {
   const { id } = useLocalSearchParams();
-  const article = news.find(a => a.id === id);
+
+  const { articles } = useArticles();
+
+  const article = articles.find(a => a.id === id);
 
   if (!article) {
     return <Text>Not found 😦</Text>;
