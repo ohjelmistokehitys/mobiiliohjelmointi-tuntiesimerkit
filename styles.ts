@@ -14,7 +14,13 @@ export const styles = StyleSheet.create({
     },
     bodyText: {
         alignSelf: "flex-start"
-    }
+    },
+    textInput: {
+        width: 200,
+        height: 40,
+        borderColor: "black",
+        borderWidth: 2
+    },
 });
 
 export const listStyles = StyleSheet.create({

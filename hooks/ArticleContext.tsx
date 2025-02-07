@@ -1,6 +1,4 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { news } from "../news";
-import { Alert } from 'react-native';
 
 type ArticleType = {
     title: string;
