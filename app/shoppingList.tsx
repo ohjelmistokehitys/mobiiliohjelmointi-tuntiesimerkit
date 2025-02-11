@@ -1,36 +1,50 @@
 import { useEffect, useState } from "react";
 import { BodyText, Container, RowView, Title } from "../components";
-import { Button, FlatList, Text, TextInput } from "react-native";
+import { ActivityIndicator, Button, FlatList, Text, TextInput } from "react-native";
 import { styles } from "@/styles";
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { useSQLiteContext } from "expo-sqlite";
 
-const STORAGE_KEY = "shoppingList";
 
-function useStorage<T>(key: string, initial: T): [T, (x: T) => void] {
-    const [data, setData] = useState<T>(initial);
-    const { getItem, setItem } = useAsyncStorage(key);
-
-    useEffect(() => {
-        getItem()
-            .then(result => {
-                result && setData(JSON.parse(result));
-            });
-    }, [])
-
-    return [data, (content: T) => {
-        setItem(JSON.stringify(content))
-            .then(() => setData(content));
-    }];
-}
 
 export default function ShoppingListScreen() {
 
-    const [contents, setContents] = useStorage(STORAGE_KEY, [] as string[]);
+    const [contents, setContents] = useState([] as string[]);
     const [text, setText] = useState("");
+    const [loading, setLoading] = useState(true);
+    const db = useSQLiteContext();
 
-    const addToList = () => {
-        setContents([...contents, text]);
-        setText("");
+    useEffect(() => {
+        fetchItems()
+            .then(() => setLoading(false));
+    }, []);
+
+    const fetchItems = async () => {
+        try {
+            const results = await db.getAllAsync("SELECT * FROM shoppinglist");
+            console.log(results);
+            const items = results.map(row => (row as any).item);
+            setContents(items);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const saveItem = async (item: string) => {
+        try {
+            await db.runAsync("INSERT INTO shoppinglist (id, item) VALUES (?, ?);", new Date().getTime(), item);
+            await fetchItems();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const clearDatabase = async () => {
+        try {
+            await db.runAsync("DELETE FROM shoppinglist");
+            await fetchItems();
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     return <Container>
@@ -39,10 +53,11 @@ export default function ShoppingListScreen() {
 
         <RowView>
             <TextInput value={text} onChangeText={setText} style={styles.textInput} />
-            <Button title="Add" onPress={addToList} />
-            <Button title="Clear" onPress={() => setContents([])} color={"red"} />
+            <Button title="Add" onPress={() => saveItem(text)} disabled={!text} />
+            <Button title="Clear" onPress={() => clearDatabase()} color={"red"} />
         </RowView>
 
+        {loading && <ActivityIndicator />}
         <FlatList
             data={contents}
             renderItem={({ item }) => <Text>{item}</Text>}
