@@ -11,31 +11,31 @@ type RecipeType = {
     idMeal: string
 }
 
+// "perinteinen" malli eli "callback"-funktiot:
+export const search = async (setLoading: (x: boolean) => void, setRecipes: (x: RecipeType[]) => void, keyword: string) => {
+    try {
+        setLoading(true);
+
+        let response = await fetch(URL + encodeURIComponent(keyword));
+
+        if (!response.ok) {
+            console.error(response);
+            throw new Error(`Error in search: ${response.status}`);
+        }
+
+        let json = await response.json();
+        setRecipes(json.meals ?? []);
+    } catch (e) {
+        Alert.alert(`Search failed`)
+    } finally {
+        setLoading(false);
+    }
+}
+
 export default function RecipeSearch() {
     const [keyword, setKeyword] = useState("");
     const [loading, setLoading] = useState(false);
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
-
-    const search = async () => {
-        try {
-            setLoading(true);
-            setRecipes([]);
-
-            let response = await fetch(URL + encodeURIComponent(keyword));
-
-            if (!response.ok) {
-                console.error(response);
-                throw new Error(`Error in search: ${response.status}`);
-            }
-
-            let json = await response.json();
-            setRecipes(json.meals ?? []);
-        } catch (e) {
-            Alert.alert(`Search failed`)
-        } finally {
-            setLoading(false);
-        }
-    }
 
     return <View style={styles.container}>
         <TextInput style={styles.textInput}
@@ -44,7 +44,7 @@ export default function RecipeSearch() {
             placeholder="Search by ingredient..."
             placeholderTextColor={styles.textInput.color} />
 
-        <Button title="Search 🔍" onPress={search} />
+        <Button title="Search 🔍" onPress={() => search(setLoading, setRecipes, keyword)} />
 
         {loading && <ActivityIndicator size="large" />}
 

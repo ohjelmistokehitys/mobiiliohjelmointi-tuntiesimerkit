@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Button, FlatList, Image, Keyboard, Pressable, TextInput, View } from "react-native";
+import { Button, View } from "react-native";
 import styles from "../components/styles";
 import { useEffect, useState } from "react";
 import { StyledText, Title } from "../components/Text";
@@ -18,21 +18,9 @@ const fetchCurrencies = async () => {
     return json.eur;
 }
 
-export default function CurrencyScreen() {
-
-    const [amount, setAmount] = useState(100);
+export function useCurrencies(): [boolean, Record<string, number>] {
     const [loading, setLoading] = useState(true);
-    const [selected, setSelected] = useState("usd");
-    const [message, setMessage] = useState("Input amount and convert!");
     const [currencies, setCurrencies] = useState<Record<string, number>>({});
-
-    const convert = () => {
-        const multiplier = currencies[selected];
-        const fromEuro = (amount * multiplier).toFixed(2);
-        const toEuro = (amount / multiplier).toFixed(2);
-
-        setMessage(`${amount} eur = ${fromEuro} ${selected}\n${amount} ${selected} = ${toEuro} eur`);
-    };
 
     useEffect(() => {
         fetchCurrencies()
@@ -41,27 +29,44 @@ export default function CurrencyScreen() {
             .finally(() => setLoading(false));
     }, []);
 
+    return [loading, currencies];
+}
+
+function convert(amount: number, multiplier: number) {
+    const fromEuro = (amount * multiplier).toFixed(2);
+    const toEuro = (amount / multiplier).toFixed(2);
+
+    return { fromEuro, toEuro };
+}
+
+export default function CurrencyScreen() {
+    const [loading, currencies] = useCurrencies();
+    const [amount, setAmount] = useState(100);
+    const [selected, setSelected] = useState("usd");
 
     if (loading) {
         return <LoadingScreen />;
     }
 
+
+    const multiplier = currencies[selected];
+    const { fromEuro, toEuro } = convert(amount, multiplier);
+    const message = `${amount} eur = ${fromEuro} ${selected}\n${amount} ${selected} = ${toEuro} eur`;
+
     return <View style={styles.container}>
         <StyledText>Enter amount:</StyledText>
-        <NumberInput value={amount} onChange={setAmount} />
+        <NumberInput value={amount} onChange={(amt) => { setAmount(amt); }} />
 
         <View style={styles.pickerContainer}>
             <Picker
                 style={styles.picker}
                 selectedValue={selected}
-                onValueChange={setSelected}
+                onValueChange={(value) => { setSelected(value); }}
                 dropdownIconColor={styles.textInput.borderColor}
             >
                 {Object.keys(currencies).map(code => <Picker.Item value={code} label={code.toUpperCase()} key={code} />)}
             </Picker>
         </View>
-
-        <Button title="Convert 💰" onPress={convert} />
 
         <StyledText style={{ textAlign: "center" }}>{message}</StyledText>
     </View >
